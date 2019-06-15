@@ -1,11 +1,10 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,14 +13,26 @@ public class FlatOfferEntity {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="flat_offer_id")
 	private int flatOfferId;
-	private int discountAmount;
-	private int minCartValue;
-	
-    @OneToOne(mappedBy = "flatOfferEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-	private OfferEntity offerEntity;
-	
     
+    @Column(name="discount_amount")
+	private int discountAmount;
+    
+    @Column(name="min_cart_val")
+	private int minCartValue;
+    
+    @Column(name="offer_id")
+    private int offerId;
+    
+	public int getOfferId() {
+		return offerId;
+	}
+	
+	public void setOfferId(int offerId) {
+		this.offerId = offerId;
+	}
+	
 	public int getFlatOfferId() {
 		return flatOfferId;
 	}
@@ -41,6 +52,12 @@ public class FlatOfferEntity {
 		this.minCartValue = minCartValue;
 	}
 	
+	public int getDiscountAmount() {
+		return discountAmount;
+	}
+	public void setDiscountAmount(int discountAmount) {
+		this.discountAmount = discountAmount;
+	}
 	
 	
 }

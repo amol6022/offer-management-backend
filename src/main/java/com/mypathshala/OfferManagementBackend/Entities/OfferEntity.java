@@ -123,7 +123,6 @@ public class OfferEntity {
 	
 }
 
-
 /*create table offer_table(offer_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, offer_type VARCHAR(50) NOT NULL,
 		use_type VARCHAR(50) NOT NULL, creator VARCHAR(100) NOT NULL, diplay_type VARCHAR(20) NOT NULL, display_content VARCHAR(100) NOT NULL,
 		status VARCHAR(20), use_count INT(6) NOT NULL);*/
