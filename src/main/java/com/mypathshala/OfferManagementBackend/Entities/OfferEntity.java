@@ -37,6 +37,12 @@ public class OfferEntity {
 	
 	@Column(name="use_count")
 	private int useCount;
+	
+	@Column(name="p_id")
+	private int pId;
+	
+	@Column(name="criteria_id")
+	private int criteriaId;
 
 	public int getOfferId() {
 		return offerId;
@@ -102,9 +108,25 @@ public class OfferEntity {
 		this.useCount = useCount;
 	}
 
+	public int getpId() {
+		return pId;
+	}
+
+	public void setpId(int pId) {
+		this.pId = pId;
+	}
+
+	public int getCriteriaId() {
+		return criteriaId;
+	}
+
+	public void setCriteriaId(int criteriaId) {
+		this.criteriaId = criteriaId;
+	}
+
 	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
-			String displayContent, String status, int useCount) {
-		
+			String displayContent, String status, int useCount, int pId, int criteriaId) {
+
 		this.offerId = offerId;
 		this.offerType = offerType;
 		this.useType = useType;
@@ -113,12 +135,16 @@ public class OfferEntity {
 		this.displayContent = displayContent;
 		this.status = status;
 		this.useCount = useCount;
+		this.pId = pId;
+		this.criteriaId = criteriaId;
+	
 	}
 
 	public OfferEntity() {
 		
 	}
 	
+		
 	
 	
 }

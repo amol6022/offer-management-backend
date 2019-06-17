@@ -50,9 +50,7 @@ public class OfferController {
 	
 	@RequestMapping(method=RequestMethod.POST, value="/offers")
 	public void createOffer(@RequestBody OfferModel offerModel) {
-//		System.out.println("Controller: "+offerModel.getUseType());
-		offerService.createOffer(offerModel);
-		
+		offerService.createOffer(offerModel);		
 	}
 	
 	

@@ -46,7 +46,7 @@
 		<dependency>
     		<groupId>com.fasterxml.jackson.core</groupId>
     		<artifactId>jackson-annotations</artifactId>
-    		</dependency>
+    		</dependency><!--$NO-MVN-MAN-VER$-->
 		<dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-entitymanager</artifactId>
@@ -54,7 +54,7 @@
 		<dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-jetty</artifactId>
-		</dependency>
+		</dependency><!--$NO-MVN-MAN-VER$-->
 		<dependency>
 			 <groupId>org.modelmapper.extensions</groupId>
 			 <artifactId>modelmapper-spring</artifactId>
