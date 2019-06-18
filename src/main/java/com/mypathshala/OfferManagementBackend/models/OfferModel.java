@@ -13,8 +13,8 @@ public class OfferModel {
 	}
 	
 
-	public OfferModel(int offerId, PlacementDetails placementDetails, CriteriaDetails criteriaDetails,
-			OfferDetails offerDetails) {
+	public OfferModel(int offerId, PlacementDetails placementDetails, 
+					 CriteriaDetails criteriaDetails, OfferDetails offerDetails) {
 		this.offerId = offerId;
 		this.placementDetails = placementDetails;
 		this.criteriaDetails = criteriaDetails;

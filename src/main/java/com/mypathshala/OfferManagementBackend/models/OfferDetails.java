@@ -103,7 +103,7 @@ public class OfferDetails {
 	public int getFlatDiscount() {
 		return flatDiscount;
 	}
-	public void setFlatDiscount(int flatDiscount) {
+	public void setFlatDiscount(int flatDiscount){
 		this.flatDiscount = flatDiscount;
 	}
 	public int getCouponDiscount() {

@@ -50,6 +50,7 @@ public class OfferController {
 	
 	@RequestMapping(method=RequestMethod.POST, value="/offers")
 	public void createOffer(@RequestBody OfferModel offerModel) {
+//		System.out.println("Controller class, use count received is: "+offerModel.getOfferDetails().getUseCount());
 		offerService.createOffer(offerModel);		
 	}
 	

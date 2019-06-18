@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class CriteriaEntity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="criteria_id")
 	private int criteriaId;
 	

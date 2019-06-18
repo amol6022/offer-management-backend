@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class PlacementEntity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="p_id")
 	private int pId;
 	

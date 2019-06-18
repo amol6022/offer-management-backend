@@ -95,6 +95,7 @@ public class OfferService {
 		
 		PlacementEntity pe=modelMapper.map(offerModel, PlacementEntity.class);
 		pe=placementRepo.save(pe);		
+//		System.out.println("Id received from placement table: "+pe.getpId());
 		offerModel.getPlacementDetails().setpId(pe.getpId());
 		
 		
@@ -145,6 +146,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setpId(source.getPlacementDetails().getpId());
 				map().setOfferType(source.getOfferDetails().getOfferType());
 				map().setDisplayType(source.getOfferDetails().getDisplayType());
 				map().setUseType(source.getOfferDetails().getUseType());

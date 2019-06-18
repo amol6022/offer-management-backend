@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class FlatOfferEntity {
 	
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="flat_offer_id")
 	private int flatOfferId;
     

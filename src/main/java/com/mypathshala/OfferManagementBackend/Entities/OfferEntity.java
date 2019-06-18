@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class OfferEntity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="offer_id")
 	private int offerId;
 	

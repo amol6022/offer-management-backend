@@ -12,7 +12,7 @@ import javax.persistence.Table;
 public class CouponEntity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="coupon_id")
 	private int couponId;
 	
