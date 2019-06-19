@@ -86,61 +86,39 @@ public class OfferService {
 	
 	public void createOffer(OfferModel offerModel) {
 		
-		ModelMapper modelMapper=new ModelMapper();
-			
-		offerModel.getOfferDetails().setStatus("active");
-		
-		PropertyMap<OfferModel,PlacementEntity> modelToPlacement=mapModelToPlacementEntity();
-		modelMapper.addMappings(modelToPlacement);
-		
-		PlacementEntity pe=modelMapper.map(offerModel, PlacementEntity.class);
-		pe=placementRepo.save(pe);		
-//		System.out.println("Id received from placement table: "+pe.getpId());
-		offerModel.getPlacementDetails().setpId(pe.getpId());
-		
-		
-		PropertyMap<OfferModel,CriteriaEntity> modelToCriteria=mapModelToCriteriaEntity();
-		modelMapper.addMappings(modelToCriteria);
-		
-		CriteriaEntity cre=modelMapper.map(offerModel, CriteriaEntity.class);
-		cre=criteriaRepo.save(cre);
-		offerModel.getCriteriaDetails().setCriteriaId(cre.getCriteriaId());
-		
-		PropertyMap<OfferModel,OfferEntity> modelToOffer= mapModelToOfferEntity();
-		modelMapper.addMappings(modelToOffer);
-		
-		OfferEntity oe=modelMapper.map(offerModel,OfferEntity.class);
-		oe=offerRepo.save(oe);
-		offerModel.setOfferId(oe.getOfferId());
-
 		String offerType=offerModel.getOfferDetails().getOfferType();
+		
+		addMissingInfo(offerModel);
+		
+		offerModel.getPlacementDetails().setpId(placementRepo.save(mapModelToPlacementEntity(offerModel)).getpId());
+		
+		offerModel.getCriteriaDetails().setCriteriaId(criteriaRepo.save(mapModelToCriteriaEntity(offerModel)).getCriteriaId());
+		
+		offerModel.setOfferId(offerRepo.save(mapModelToOfferEntity(offerModel)).getOfferId());
 		
 		if("flat".equals(offerType)) {
 			
-			PropertyMap<OfferModel,FlatOfferEntity> modelToFlatOffer=mapModelToFlatEntity();
-			modelMapper.addMappings(modelToFlatOffer);
-			FlatOfferEntity foe=modelMapper.map(offerModel, FlatOfferEntity.class);
-			flatOfferRepo.save(foe);
+			flatOfferRepo.save(mapModelToFlatEntity(offerModel));
 			
 		}else if("percent".equals(offerType)) {
 			
-			PropertyMap<OfferModel,PercentOfferEntity> modelToPercentOffer=mapModelToPercentEntity();
-			modelMapper.addMappings(modelToPercentOffer);
-			PercentOfferEntity foe=modelMapper.map(offerModel, PercentOfferEntity.class);
-			percentOfferRepo.save(foe);
+			percentOfferRepo.save(mapModelToPercentEntity(offerModel));
 			
 		}else if("coupon".equals(offerType)){
 			
-			PropertyMap<OfferModel,CouponEntity> modelToCoupon=mapModelToCouponEntity();
-			modelMapper.addMappings(modelToCoupon);
-			CouponEntity ce=modelMapper.map(offerModel, CouponEntity.class);
-			couponRepo.save(ce);
-		
+			couponRepo.save(mapModelToCouponEntity(offerModel));
+			
 		}
 		
+	} 
+	
+	
+
+	private void addMissingInfo(OfferModel offerModel) {
+		offerModel.getOfferDetails().setStatus("active");		
 	}
 
-	private PropertyMap<OfferModel,OfferEntity> mapModelToOfferEntity(){
+	private OfferEntity mapModelToOfferEntity(OfferModel offerModel){
 		
 		PropertyMap<OfferModel,OfferEntity> conversionMap=new PropertyMap<OfferModel,OfferEntity>(){
 			
@@ -157,10 +135,14 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap;
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, OfferEntity.class);
 	} 
 	
-	private PropertyMap<OfferModel,CriteriaEntity> mapModelToCriteriaEntity() {
+	
+	private CriteriaEntity mapModelToCriteriaEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel,CriteriaEntity> conversionMap=new PropertyMap<OfferModel,CriteriaEntity>(){
 			
@@ -172,12 +154,15 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap;
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, CriteriaEntity.class);
 		
 	}
 
 
-	private PropertyMap<OfferModel,PlacementEntity> mapModelToPlacementEntity() {
+	private PlacementEntity mapModelToPlacementEntity(OfferModel offerModel) {
 			
 		PropertyMap<OfferModel,PlacementEntity> conversionMap=new PropertyMap<OfferModel,PlacementEntity>(){
 			
@@ -189,11 +174,14 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap;
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, PlacementEntity.class);
 	}
 
 
-	private PropertyMap<OfferModel,CouponEntity> mapModelToCouponEntity() {
+	private CouponEntity mapModelToCouponEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel,CouponEntity>  conversionMap=new PropertyMap<OfferModel,CouponEntity>(){
 			
@@ -204,12 +192,15 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap; 
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, CouponEntity.class); 
 		
 	}
 
 
-	private PropertyMap<OfferModel, PercentOfferEntity> mapModelToPercentEntity() {
+	private PercentOfferEntity mapModelToPercentEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel, PercentOfferEntity>  conversionMap=new PropertyMap<OfferModel,PercentOfferEntity>(){
 			
@@ -221,12 +212,15 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap; 
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, PercentOfferEntity.class); 
 		
 	}
 
 
-	public PropertyMap<OfferModel,FlatOfferEntity> mapModelToFlatEntity() {
+	public FlatOfferEntity mapModelToFlatEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel, FlatOfferEntity>  conversionMap=new PropertyMap<OfferModel,FlatOfferEntity>(){
 			
@@ -237,24 +231,11 @@ public class OfferService {
 			}
 		};
 		
-		return conversionMap; 
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		return modelMapper.map(offerModel, FlatOfferEntity.class); 
 		
 	}
-	
-	
-//	private TypeMap<OfferModel, OfferEntity> mapModelToOfferEntity() {
-//
-//		 TypeMap<OfferModel, OfferEntity> typeMap = new ModelMapper().createTypeMap(OfferModel.class, OfferEntity.class)
-//				.addMapping(src->src.getOfferDetails().getOfferType(), OfferEntity::setOfferType)
-//				.addMapping(src->src.getOfferDetails().getDisplayType(), OfferEntity::setDisplayType)
-//				.addMapping(src->src.getOfferDetails().getUseType(), OfferEntity::setUseType)
-//				.addMapping(src->src.getOfferDetails().getCreator(), OfferEntity::setCreator)
-//				.addMapping(src->src.getOfferDetails().getDisplayContent(), OfferEntity::setDisplayContent)
-//				.addMapping(src->src.getOfferDetails().getStatus(), OfferEntity::setStatus)
-//				.addMapping(src->src.getOfferDetails().getUseCount(), OfferEntity::setUseCount);
-//			
-//		
-//		return typeMap;
-//	}
 	
 }

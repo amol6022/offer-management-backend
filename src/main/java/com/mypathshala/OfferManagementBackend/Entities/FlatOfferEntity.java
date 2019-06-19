@@ -7,9 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="flat_offer_table")
-public class FlatOfferEntity {
+public class FlatOfferEntity{
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +59,5 @@ public class FlatOfferEntity {
 	public void setDiscountAmount(int discountAmount) {
 		this.discountAmount = discountAmount;
 	}
-	
 	
 }
