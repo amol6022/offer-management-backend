@@ -46,21 +46,45 @@ public class OfferService {
 	
 	public List<OfferModel> getAllOffers(){
 		
+		Iterable<FlatOfferEntity> foe=flatOfferRepo.findAll();
+
+		Iterable<PercentOfferEntity> poe=percentOfferRepo.findAll();
+		
+		Iterable<CouponEntity> ce=couponRepo.findAll();
+		
 		List<OfferModel> list=new ArrayList<>();
 		
-		Iterable<OfferEntity> itr=offerRepo.findAll();
-		
-		ModelMapper modelMapper=new ModelMapper();
-		
-		for(OfferEntity oe:itr){
-			list.add(modelMapper.map(oe, OfferModel.class));
+		ModelMapper modelMapper=setEntityToModelMappings();
+				
+		for(FlatOfferEntity tempFoe:foe) {
+			list.add(modelMapper.map(tempFoe, OfferModel.class));
 		}
 		
+		for(PercentOfferEntity tempPoe:poe) {
+			list.add(modelMapper.map(tempPoe, OfferModel.class));
+		}
+		
+		for(CouponEntity tempCe:ce) {
+			list.add(modelMapper.map(tempCe, OfferModel.class));
+		}
+
 		return list;
 	
 	}
 	
 	
+	private ModelMapper setEntityToModelMappings() {
+		
+		ModelMapper modelMapper=new ModelMapper();
+		
+		modelMapper.addMappings(flatEntityToModel());
+		modelMapper.addMappings(percentEntityToModel());
+		modelMapper.addMappings(couponEntityToModel());
+		
+		return modelMapper;
+	}
+
+
 	public List<OfferModel> getOffersByCreator(String creator){
 		return null;
 	}
@@ -89,42 +113,39 @@ public class OfferService {
 		String offerType=offerModel.getOfferDetails().getOfferType();
 		
 		addMissingInfo(offerModel);
-		
-		offerModel.getPlacementDetails().setpId(placementRepo.save(mapModelToPlacementEntity(offerModel)).getpId());
-		
-		offerModel.getCriteriaDetails().setCriteriaId(criteriaRepo.save(mapModelToCriteriaEntity(offerModel)).getCriteriaId());
-		
-		offerModel.setOfferId(offerRepo.save(mapModelToOfferEntity(offerModel)).getOfferId());
-		
+				
 		if("flat".equals(offerType)) {
 			
-			flatOfferRepo.save(mapModelToFlatEntity(offerModel));
+			flatOfferRepo.save(modelToFlatEntity(offerModel));
 			
 		}else if("percent".equals(offerType)) {
 			
-			percentOfferRepo.save(mapModelToPercentEntity(offerModel));
+			percentOfferRepo.save(modelToPercentEntity(offerModel));
 			
 		}else if("coupon".equals(offerType)){
 			
-			couponRepo.save(mapModelToCouponEntity(offerModel));
+			couponRepo.save(modelToCouponEntity(offerModel));
 			
 		}
 		
 	} 
-	
 	
 
 	private void addMissingInfo(OfferModel offerModel) {
 		offerModel.getOfferDetails().setStatus("active");		
 	}
 
-	private OfferEntity mapModelToOfferEntity(OfferModel offerModel){
+	private OfferEntity modelToOfferEntity(OfferModel offerModel){
 		
 		PropertyMap<OfferModel,OfferEntity> conversionMap=new PropertyMap<OfferModel,OfferEntity>(){
 			
 			@Override
 			protected void configure() {
-				map().setpId(source.getPlacementDetails().getpId());
+				map().setPlacementEntity(modelToPlacementEntity(offerModel));
+				
+				map().setCriteriaEntity(modelToCriteriaEntity(offerModel));
+				
+				map().setOfferId(source.getOfferId());
 				map().setOfferType(source.getOfferDetails().getOfferType());
 				map().setDisplayType(source.getOfferDetails().getDisplayType());
 				map().setUseType(source.getOfferDetails().getUseType());
@@ -142,7 +163,7 @@ public class OfferService {
 	} 
 	
 	
-	private CriteriaEntity mapModelToCriteriaEntity(OfferModel offerModel) {
+	private CriteriaEntity modelToCriteriaEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel,CriteriaEntity> conversionMap=new PropertyMap<OfferModel,CriteriaEntity>(){
 			
@@ -162,7 +183,7 @@ public class OfferService {
 	}
 
 
-	private PlacementEntity mapModelToPlacementEntity(OfferModel offerModel) {
+	private PlacementEntity modelToPlacementEntity(OfferModel offerModel) {
 			
 		PropertyMap<OfferModel,PlacementEntity> conversionMap=new PropertyMap<OfferModel,PlacementEntity>(){
 			
@@ -181,12 +202,13 @@ public class OfferService {
 	}
 
 
-	private CouponEntity mapModelToCouponEntity(OfferModel offerModel) {
+	private CouponEntity modelToCouponEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel,CouponEntity>  conversionMap=new PropertyMap<OfferModel,CouponEntity>(){
 			
 			@Override
 			protected void configure() {
+				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setCouponDiscount(source.getOfferDetails().getCouponDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
 			}
@@ -200,12 +222,13 @@ public class OfferService {
 	}
 
 
-	private PercentOfferEntity mapModelToPercentEntity(OfferModel offerModel) {
+	private PercentOfferEntity modelToPercentEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel, PercentOfferEntity>  conversionMap=new PropertyMap<OfferModel,PercentOfferEntity>(){
 			
 			@Override
 			protected void configure() {
+				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setPercentDiscount(source.getOfferDetails().getPercentDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
 				map().setMaxDiscount(source.getOfferDetails().getMaxDiscount());
@@ -220,12 +243,13 @@ public class OfferService {
 	}
 
 
-	public FlatOfferEntity mapModelToFlatEntity(OfferModel offerModel) {
+	private FlatOfferEntity modelToFlatEntity(OfferModel offerModel) {
 		
 		PropertyMap<OfferModel, FlatOfferEntity>  conversionMap=new PropertyMap<OfferModel,FlatOfferEntity>(){
 			
 			@Override
 			protected void configure() {
+				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setDiscountAmount(source.getOfferDetails().getFlatDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
 			}
@@ -236,6 +260,108 @@ public class OfferService {
 		
 		return modelMapper.map(offerModel, FlatOfferEntity.class); 
 		
+	}
+
+	
+	private PropertyMap<FlatOfferEntity, OfferModel> flatEntityToModel() {
+				
+		PropertyMap<FlatOfferEntity, OfferModel>  conversionMap=new PropertyMap<FlatOfferEntity, OfferModel>(){
+			
+			
+			@Override
+			protected void configure() {
+				map().setOfferId(source.getFlatOfferId());
+				map().getPlacementDetails().setpId(source.getOfferEntity().getPlacementEntity().getpId());
+				map().getPlacementDetails().setSiteId(source.getOfferEntity().getPlacementEntity().getSiteId());
+				map().getPlacementDetails().setPageId(source.getOfferEntity().getPlacementEntity().getPageId());
+				map().getPlacementDetails().setPlaceId(source.getOfferEntity().getPlacementEntity().getPlaceId());
+				map().getCriteriaDetails().setCriteriaId(source.getOfferEntity().getCriteriaEntity().getCriteriaId());
+				map().getCriteriaDetails().setUserAge(source.getOfferEntity().getCriteriaEntity().getUserAge());
+				map().getCriteriaDetails().setRegion(source.getOfferEntity().getCriteriaEntity().getRegion());
+				map().getCriteriaDetails().setNumOfPurchases(source.getOfferEntity().getCriteriaEntity().getNumOfPurchases());
+				map().getOfferDetails().setOfferId(source.getOfferEntity().getOfferId());
+				map().getOfferDetails().setOfferType(source.getOfferEntity().getOfferType());
+				map().getOfferDetails().setUseType(source.getOfferEntity().getUseType());
+				map().getOfferDetails().setCreator(source.getOfferEntity().getCreator());
+				map().getOfferDetails().setDisplayType(source.getOfferEntity().getDisplayType());
+				map().getOfferDetails().setDisplayContent(source.getOfferEntity().getDisplayContent());
+				map().getOfferDetails().setStatus(source.getOfferEntity().getStatus());
+				map().getOfferDetails().setUseCount(source.getOfferEntity().getUseCount());
+				map().getOfferDetails().setFlatDiscount(source.getDiscountAmount());
+				map().getOfferDetails().setMinCartValue(source.getMinCartValue());
+			}
+
+		};
+		
+		return conversionMap;
+		
+	}
+	
+	
+	private PropertyMap<PercentOfferEntity, OfferModel> percentEntityToModel() {
+		
+		PropertyMap<PercentOfferEntity, OfferModel>  conversionMap=new PropertyMap<PercentOfferEntity, OfferModel>(){
+			
+			@Override
+			protected void configure() {
+				map().setOfferId(source.getPercentOfferId());
+				map().getPlacementDetails().setpId(source.getOfferEntity().getPlacementEntity().getpId());
+				map().getPlacementDetails().setSiteId(source.getOfferEntity().getPlacementEntity().getSiteId());
+				map().getPlacementDetails().setPageId(source.getOfferEntity().getPlacementEntity().getPageId());
+				map().getPlacementDetails().setPlaceId(source.getOfferEntity().getPlacementEntity().getPlaceId());
+				map().getCriteriaDetails().setCriteriaId(source.getOfferEntity().getCriteriaEntity().getCriteriaId());
+				map().getCriteriaDetails().setUserAge(source.getOfferEntity().getCriteriaEntity().getUserAge());
+				map().getCriteriaDetails().setRegion(source.getOfferEntity().getCriteriaEntity().getRegion());
+				map().getCriteriaDetails().setNumOfPurchases(source.getOfferEntity().getCriteriaEntity().getNumOfPurchases());
+				map().getOfferDetails().setOfferId(source.getOfferEntity().getOfferId());
+				map().getOfferDetails().setOfferType(source.getOfferEntity().getOfferType());
+				map().getOfferDetails().setUseType(source.getOfferEntity().getUseType());
+				map().getOfferDetails().setCreator(source.getOfferEntity().getCreator());
+				map().getOfferDetails().setDisplayType(source.getOfferEntity().getDisplayType());
+				map().getOfferDetails().setDisplayContent(source.getOfferEntity().getDisplayContent());
+				map().getOfferDetails().setStatus(source.getOfferEntity().getStatus());
+				map().getOfferDetails().setUseCount(source.getOfferEntity().getUseCount());
+				map().getOfferDetails().setPercentDiscount(source.getPercentDiscount());
+				map().getOfferDetails().setMaxDiscount(source.getMaxDiscount());
+				map().getOfferDetails().setMinCartValue(source.getMinCartValue());
+			}
+
+		};
+		
+		return conversionMap;
+	}
+	
+	
+	private PropertyMap<CouponEntity, OfferModel> couponEntityToModel() {
+		
+		PropertyMap<CouponEntity, OfferModel>  conversionMap=new PropertyMap<CouponEntity, OfferModel>(){
+			
+			@Override
+			protected void configure() {
+				map().setOfferId(source.getCouponId());
+				map().getPlacementDetails().setpId(source.getOfferEntity().getPlacementEntity().getpId());
+				map().getPlacementDetails().setSiteId(source.getOfferEntity().getPlacementEntity().getSiteId());
+				map().getPlacementDetails().setPageId(source.getOfferEntity().getPlacementEntity().getPageId());
+				map().getPlacementDetails().setPlaceId(source.getOfferEntity().getPlacementEntity().getPlaceId());
+				map().getCriteriaDetails().setCriteriaId(source.getOfferEntity().getCriteriaEntity().getCriteriaId());
+				map().getCriteriaDetails().setUserAge(source.getOfferEntity().getCriteriaEntity().getUserAge());
+				map().getCriteriaDetails().setRegion(source.getOfferEntity().getCriteriaEntity().getRegion());
+				map().getCriteriaDetails().setNumOfPurchases(source.getOfferEntity().getCriteriaEntity().getNumOfPurchases());
+				map().getOfferDetails().setOfferId(source.getOfferEntity().getOfferId());
+				map().getOfferDetails().setOfferType(source.getOfferEntity().getOfferType());
+				map().getOfferDetails().setUseType(source.getOfferEntity().getUseType());
+				map().getOfferDetails().setCreator(source.getOfferEntity().getCreator());
+				map().getOfferDetails().setDisplayType(source.getOfferEntity().getDisplayType());
+				map().getOfferDetails().setDisplayContent(source.getOfferEntity().getDisplayContent());
+				map().getOfferDetails().setStatus(source.getOfferEntity().getStatus());
+				map().getOfferDetails().setUseCount(source.getOfferEntity().getUseCount());
+				map().getOfferDetails().setCouponDiscount(source.getCouponDiscount());
+				map().getOfferDetails().setMinCartValue(source.getMinCartValue());
+			}
+
+		};
+		
+		return conversionMap;
 	}
 	
 }

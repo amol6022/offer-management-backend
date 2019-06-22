@@ -1,10 +1,13 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,17 +16,15 @@ public class CouponEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="coupon_id")
 	private int couponId;
 	
-	@Column(name="coupon_discount")
 	private int couponDiscount;
 	
-	@Column(name="min_cart_val")
 	private int minCartValue;
 	
-	@Column(name="offer_id")
-	private int offerId;
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "offer_id")
+    private OfferEntity offerEntity;
 	
 	public int getCouponId() {
 		return couponId;
@@ -37,11 +38,11 @@ public class CouponEntity {
 	public void setCouponDiscount(int couponDiscount) {
 		this.couponDiscount = couponDiscount;
 	}
-	public int getOfferId() {
-		return offerId;
+	public OfferEntity getOfferEntity() {
+		return offerEntity;
 	}
-	public void setOfferId(int offerId) {
-		this.offerId = offerId;
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity = offerEntity;
 	}
 	public int getMinCartValue() {
 		return minCartValue;

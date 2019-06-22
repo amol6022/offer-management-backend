@@ -1,6 +1,5 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,16 +12,12 @@ public class PlacementEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="p_id")
 	private int pId;
 	
-	@Column(name="site_id")
 	private String siteId;
 	
-	@Column(name="page_id")
 	private String pageId;
 	
-	@Column(name="place_id")
 	private String placeId;
 	
 	public PlacementEntity(int pId, String siteId, String pageId, String placeId) {

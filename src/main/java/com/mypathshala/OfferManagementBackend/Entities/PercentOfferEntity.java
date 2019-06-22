@@ -1,10 +1,13 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,27 +16,24 @@ public class PercentOfferEntity {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="percent_offer_id")
 	private int percentOfferId;
 	
-	@Column(name="percent_discount")
 	private int percentDiscount;
 	
-	@Column(name="max_discount")
 	private int maxDiscount;
 	
-	@Column(name="min_cart_val")
 	private int minCartValue;
 	
-	@Column(name="offer_id")
-    private int offerId;
-    
-	public int getOfferId() {
-		return offerId;
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "offer_id")
+    private OfferEntity offerEntity;
+
+	public OfferEntity getOfferEntity() {
+		return offerEntity;
 	}
-	
-	public void setOfferId(int offerId) {
-		this.offerId = offerId;
+
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity = offerEntity;
 	}
 
 	public int getPercentOfferId() {

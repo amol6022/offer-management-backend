@@ -1,10 +1,13 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -14,39 +17,42 @@ public class OfferEntity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="offer_id")
 	private int offerId;
 	
-	@Column(name="offer_type")
 	private String offerType;
 	
-	@Column(name="use_type")
 	private String useType;
 	
-	@Column(name="creator")
 	private String creator;
 	
-	@Column(name="display_type")
 	private String displayType;
 	
-	@Column(name="display_content")
 	private String displayContent;
 	
-	@Column(name="status")
 	private String status;
 	
-	@Column(name="use_count")
 	private int useCount;
 	
-	@Column(name="p_id")
-	private int pId;
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+	private FlatOfferEntity flatOfferEntity;
 	
-	@Column(name="criteria_id")
-	private int criteriaId;
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+	private PercentOfferEntity percentOfferEntity;
 	
-	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
-			String displayContent, String status, int useCount, int pId, int criteriaId) {
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+	private CouponEntity couponEntity;
+	
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "placement_id")
+	private PlacementEntity placementEntity;
+	
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinColumn(name = "criteria_id")
+	private CriteriaEntity criteriaEntity;
 
+	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
+			String displayContent, String status, int useCount, PlacementEntity placementEntity,
+			CriteriaEntity criteriaEntity) {
 		this.offerId = offerId;
 		this.offerType = offerType;
 		this.useType = useType;
@@ -55,9 +61,8 @@ public class OfferEntity {
 		this.displayContent = displayContent;
 		this.status = status;
 		this.useCount = useCount;
-		this.pId = pId;
-		this.criteriaId = criteriaId;
-	
+		this.placementEntity = placementEntity;
+		this.criteriaEntity = criteriaEntity;
 	}
 
 	public OfferEntity() {
@@ -128,20 +133,20 @@ public class OfferEntity {
 		this.useCount = useCount;
 	}
 
-	public int getpId() {
-		return pId;
+	public PlacementEntity getPlacementEntity() {
+		return placementEntity;
 	}
 
-	public void setpId(int pId) {
-		this.pId = pId;
+	public void setPlacementEntity(PlacementEntity placementEntity) {
+		this.placementEntity = placementEntity;
 	}
 
-	public int getCriteriaId() {
-		return criteriaId;
+	public CriteriaEntity getCriteriaEntity() {
+		return criteriaEntity;
 	}
 
-	public void setCriteriaId(int criteriaId) {
-		this.criteriaId = criteriaId;
+	public void setCriteriaEntity(CriteriaEntity criteriaEntity) {
+		this.criteriaEntity = criteriaEntity;
 	}
 	
 	

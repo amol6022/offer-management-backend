@@ -3,6 +3,7 @@ package com.mypathshala.OfferManagementBackend.models;
 
 public class OfferDetails {
 	
+	private int offerId;
 	private String offerType;
 	private String useType;
 	private String creator;
@@ -40,6 +41,14 @@ public class OfferDetails {
 	
 	}
 	
+	public int getOfferId() {
+		return offerId;
+	}
+
+	public void setOfferId(int offerId) {
+		this.offerId = offerId;
+	}
+
 	public String getOfferType() {
 		return offerType;
 	}
