@@ -1,9 +1,11 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,9 @@ public class PlacementEntity {
 	private String pageId;
 	
 	private String placeId;
+	
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="placementEntity")
+	private OfferEntity offerEntity;
 	
 	public PlacementEntity(int pId, String siteId, String pageId, String placeId) {
 		
@@ -64,6 +69,10 @@ public class PlacementEntity {
 
 	public void setPlaceId(String placeId) {
 		this.placeId = placeId;
+	}
+	
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity=offerEntity;
 	}
 	
 }

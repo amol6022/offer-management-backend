@@ -1,9 +1,11 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +21,9 @@ public class CriteriaEntity {
 	private String region;
 	
 	private int numOfPurchases;
+	
+	@OneToOne(fetch=FetchType.EAGER, mappedBy="criteriaEntity")
+	private OfferEntity offerEntity;
 
 	public CriteriaEntity(int criteriaId, int userAge, String region, int numOfPurchases) {
 
@@ -64,6 +69,10 @@ public class CriteriaEntity {
 
 	public void setNumOfPurchases(int numOfPurchases) {
 		this.numOfPurchases = numOfPurchases;
+	}
+	
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity=offerEntity;
 	}
 
 }

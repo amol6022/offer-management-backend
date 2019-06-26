@@ -108,11 +108,9 @@ public class OfferService {
 	}
 
 	
-	public void createOffer(OfferModel offerModel) {
+	public void createUpdateOffer(OfferModel offerModel) {
 		
 		String offerType=offerModel.getOfferDetails().getOfferType();
-		
-		addMissingInfo(offerModel);
 				
 		if("flat".equals(offerType)) {
 			
@@ -130,9 +128,24 @@ public class OfferService {
 		
 	} 
 	
-
-	private void addMissingInfo(OfferModel offerModel) {
-		offerModel.getOfferDetails().setStatus("active");		
+	public void deleteOffer(OfferModel offerModel) {
+		
+		String offerType=offerModel.getOfferDetails().getOfferType();
+		
+		if("flat".equals(offerType)) {
+			
+			flatOfferRepo.delete(modelToFlatEntity(offerModel));
+			
+		}else if("percent".equals(offerType)) {
+			
+			percentOfferRepo.delete(modelToPercentEntity(offerModel));
+			
+		}else if("coupon".equals(offerType)){
+			
+			couponRepo.delete(modelToCouponEntity(offerModel));
+			
+		}
+		
 	}
 
 	private OfferEntity modelToOfferEntity(OfferModel offerModel){
@@ -145,7 +158,7 @@ public class OfferService {
 				
 				map().setCriteriaEntity(modelToCriteriaEntity(offerModel));
 				
-				map().setOfferId(source.getOfferId());
+				map().setOfferId(source.getOfferDetails().getOfferId());
 				map().setOfferType(source.getOfferDetails().getOfferType());
 				map().setDisplayType(source.getOfferDetails().getDisplayType());
 				map().setUseType(source.getOfferDetails().getUseType());
@@ -169,6 +182,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setCriteriaId(source.getCriteriaDetails().getCriteriaId());
 				map().setUserAge(source.getCriteriaDetails().getUserAge());
 				map().setRegion(source.getCriteriaDetails().getRegion());
 				map().setNumOfPurchases(source.getCriteriaDetails().getNumOfPurchases());
@@ -189,6 +203,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setpId(source.getPlacementDetails().getpId());
 				map().setSiteId(source.getPlacementDetails().getSiteId());
 				map().setPageId(source.getPlacementDetails().getPageId());
 				map().setPlaceId(source.getPlacementDetails().getPlaceId());
@@ -208,6 +223,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setCouponId(source.getOfferId());
 				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setCouponDiscount(source.getOfferDetails().getCouponDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
@@ -228,6 +244,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setPercentOfferId(source.getOfferId());
 				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setPercentDiscount(source.getOfferDetails().getPercentDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
@@ -249,6 +266,7 @@ public class OfferService {
 			
 			@Override
 			protected void configure() {
+				map().setFlatOfferId(source.getOfferId());
 				map().setOfferEntity(modelToOfferEntity(offerModel));
 				map().setDiscountAmount(source.getOfferDetails().getFlatDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());

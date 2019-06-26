@@ -24,7 +24,7 @@ public class PercentOfferEntity {
 	
 	private int minCartValue;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade= CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "offer_id")
     private OfferEntity offerEntity;
 
@@ -66,6 +66,18 @@ public class PercentOfferEntity {
 
 	public void setMinCartValue(int minCartValue) {
 		this.minCartValue = minCartValue;
+	}
+	
+	public void addOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity=offerEntity;
+		offerEntity.setPercentOfferEntity(this);
+	}
+	
+	public void removeOfferEntity(OfferEntity offerEntity) {
+		if (offerEntity != null) {
+            offerEntity.setPercentOfferEntity(null);
+        }
+        this.offerEntity = null;
 	}
 
 	

@@ -42,11 +42,11 @@ public class OfferEntity {
 	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
 	private CouponEntity couponEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "placement_id")
 	private PlacementEntity placementEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "criteria_id")
 	private CriteriaEntity criteriaEntity;
 
@@ -148,10 +148,34 @@ public class OfferEntity {
 	public void setCriteriaEntity(CriteriaEntity criteriaEntity) {
 		this.criteriaEntity = criteriaEntity;
 	}
-	
+	public void setFlatOfferEntity(FlatOfferEntity flatOfferEntity) {
+		this.flatOfferEntity=flatOfferEntity;
+	}
+	public void setPercentOfferEntity(PercentOfferEntity percentOfferEntity) {
+		this.percentOfferEntity=percentOfferEntity;
+	}
+	public void setCouponEntity(CouponEntity couponEntity) {
+		this.couponEntity=couponEntity;
+	}
+	public void addPlacementEntity(PlacementEntity placementEntity) {
+		this.placementEntity=placementEntity;
+		placementEntity.setOfferEntity(this);
+	}
+	public void removePlacementEntity(PlacementEntity placementEntity) {
+		if (placementEntity != null) {
+			placementEntity.setOfferEntity(null);
+        }
+        this.placementEntity = null;
+	}
+	public void addCriteriaEntity(CriteriaEntity criteriaEntity) {
+		this.criteriaEntity=criteriaEntity;
+		criteriaEntity.setOfferEntity(this);
+	}
+	public void removeCriteriaEntity(CriteriaEntity criteriaEntity) {
+		if (criteriaEntity != null) {
+			criteriaEntity.setOfferEntity(null);
+        }
+        this.criteriaEntity = null;
+	}
 	
 }
-
-/*create table offer_table(offer_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, offer_type VARCHAR(50) NOT NULL,
-		use_type VARCHAR(50) NOT NULL, creator VARCHAR(100) NOT NULL, diplay_type VARCHAR(20) NOT NULL, display_content VARCHAR(100) NOT NULL,
-		status VARCHAR(20), use_count INT(6) NOT NULL);*/
