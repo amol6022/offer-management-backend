@@ -1,7 +1,6 @@
 package com.mypathshala.OfferManagementBackend.Controllers;
 
 import org.springframework.web.bind.annotation.RestController;
-
 import com.mypathshala.OfferManagementBackend.Services.OfferService;
 import com.mypathshala.OfferManagementBackend.models.OfferModel;
 import java.util.List;
@@ -37,23 +36,30 @@ public class OfferController {
 
 	
 	@RequestMapping("/offers/{creator}/{displayType}")
-	public List<OfferModel> getOffersByDisplayType(@PathVariable("offerType") String displayType, @PathVariable("creator") String creator){
+	public List<OfferModel> getOffersByDisplayType(@PathVariable("displayType") String displayType, @PathVariable("creator") String creator){
 		return offerService.getOffersByDisplayType(displayType,creator);
 	}
 	
 	
 	@RequestMapping("/offers/{creator}/{status}")
-	public List<OfferModel> getOffersByStatus(@PathVariable("offerType") String status, @PathVariable("creator") String creator){
+	public List<OfferModel> getOffersByStatus(@PathVariable("status") String status, @PathVariable("creator") String creator){
 		return offerService.getOffersByStatus(status,creator);
 	}
 	
 	
 	@RequestMapping(method=RequestMethod.POST, value="/offers")
 	public void createOffer(@RequestBody OfferModel offerModel) {
-		System.out.println("Controller: "+offerModel.getUseType());
-		offerService.createOffer(offerModel);
-		
+		offerService.createUpdateOffer(offerModel);		
 	}
 	
+	@RequestMapping(method=RequestMethod.PUT, value="/offers")
+	public void updateOffer(@RequestBody OfferModel offerModel){
+		offerService.createUpdateOffer(offerModel);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE, value="/offers")
+	public void deleteOffer(@RequestBody OfferModel offerModel) {
+		offerService.deleteOffer(offerModel);
+	}
 	
 }
