@@ -3,23 +3,21 @@ package com.mypathshala.OfferManagementBackend.models;
 public class CriteriaDetails {
 	
 	private int criteriaId;
-	private int userAge;
-	private String region;
-	private int numOfPurchases;
+	private String parameter;
+	private String value;
 	
 	
 	public CriteriaDetails() {
 		
 	}
 
-	public CriteriaDetails(int criteriaId, int userAge, String region, int numOfPurchases) {
-		
+	public CriteriaDetails(int criteriaId, String parameter, String value) {
 		this.criteriaId = criteriaId;
-		this.userAge = userAge;
-		this.region = region;
-		this.numOfPurchases = numOfPurchases;
-	
+		this.parameter = parameter;
+		this.value = value;
 	}
+
+
 
 	public int getCriteriaId() {
 		return criteriaId;
@@ -29,30 +27,20 @@ public class CriteriaDetails {
 		this.criteriaId = criteriaId;
 	}
 
-	public int getUserAge() {
-		return userAge;
-	}
-	
-	public void setUserAge(int userAge) {
-		this.userAge = userAge;
-	}
-	
-	public String getRegion() {
-		return region;
-	}
-	
-	public void setRegion(String region) {
-		this.region = region;
+	public String getParameter() {
+		return parameter;
 	}
 
-	public int getNumOfPurchases() {
-		return numOfPurchases;
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
 	}
 
-	public void setNumOfPurchases(int numOfPurchases) {
-		this.numOfPurchases = numOfPurchases;
+	public String getValue() {
+		return value;
 	}
-	
-	
+
+	public void setValue(String value) {
+		this.value = value;
+	}
 	
 }

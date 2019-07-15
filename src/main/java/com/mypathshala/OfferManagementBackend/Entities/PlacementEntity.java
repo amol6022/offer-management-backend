@@ -22,16 +22,21 @@ public class PlacementEntity {
 	
 	private String placeId;
 	
+	private int dismissDuration;		//in days
+	
 	@OneToOne(fetch=FetchType.EAGER, mappedBy="placementEntity")
 	private OfferEntity offerEntity;
 	
-	public PlacementEntity(int pId, String siteId, String pageId, String placeId) {
+	@OneToOne(mappedBy = "placementEntity")
+	private Placement_BestOffer_Entity placement_BestOffer_Entity;
+	
+	public PlacementEntity(int pId, String siteId, String pageId, String placeId,int dismissDuration) {
 		
 		this.pId = pId;
 		this.siteId = siteId;
 		this.pageId = pageId;
 		this.placeId = placeId;
-	
+		this.dismissDuration=dismissDuration;
 	}
 
 	
@@ -74,5 +79,27 @@ public class PlacementEntity {
 	public void setOfferEntity(OfferEntity offerEntity) {
 		this.offerEntity=offerEntity;
 	}
+
+
+	public int getDismissDuration() {
+		return dismissDuration;
+	}
+
+
+	public void setDismissDuration(int dismissDuration) {
+		this.dismissDuration = dismissDuration;
+	}
+
+
+	public Placement_BestOffer_Entity getPlacement_BestOffer_Entity() {
+		return placement_BestOffer_Entity;
+	}
+
+
+	public void setPlacement_BestOffer_Entity(Placement_BestOffer_Entity placement_BestOffer_Entity) {
+		this.placement_BestOffer_Entity = placement_BestOffer_Entity;
+	}
+	
+	
 	
 }

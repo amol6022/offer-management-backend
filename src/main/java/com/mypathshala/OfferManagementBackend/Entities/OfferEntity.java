@@ -1,5 +1,6 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,13 +43,19 @@ public class OfferEntity {
 	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
 	private CouponEntity couponEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "offerEntity")
+	private Placement_BestOffer_Entity placement_BestOffer_Entity;
+
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "placement_id")
 	private PlacementEntity placementEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "criteria_id")
-	private CriteriaEntity criteriaEntity;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name="criteria_id")
+    private CriteriaEntity criteriaEntity;
+    
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+    private DismissedOfferEntity dismissedOfferEntity;
 
 	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
 			String displayContent, String status, int useCount, PlacementEntity placementEntity,
@@ -176,6 +183,22 @@ public class OfferEntity {
 			criteriaEntity.setOfferEntity(null);
         }
         this.criteriaEntity = null;
+	}
+
+	public DismissedOfferEntity getDismissedOfferEntity() {
+		return dismissedOfferEntity;
+	}
+
+	public void setDismissedOfferEntity(DismissedOfferEntity dismissedOfferEntity) {
+		this.dismissedOfferEntity = dismissedOfferEntity;
+	}
+	
+    public Placement_BestOffer_Entity getPlacement_BestOffer_Entity() {
+		return placement_BestOffer_Entity;
+	}
+
+	public void setPlacement_BestOffer_Entity(Placement_BestOffer_Entity placement_BestOffer_Entity) {
+		this.placement_BestOffer_Entity = placement_BestOffer_Entity;
 	}
 	
 }

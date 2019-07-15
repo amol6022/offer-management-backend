@@ -1,6 +1,7 @@
 package com.mypathshala.OfferManagementBackend.models;
 
 public class PlacementDetails {
+	
 	private int pId;
 	private String siteId;
 	private String pageId;
