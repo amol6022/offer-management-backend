@@ -11,11 +11,13 @@ import com.mypathshala.OfferManagementBackend.Entities.CouponEntity;
 import com.mypathshala.OfferManagementBackend.Entities.FlatOfferEntity;
 import com.mypathshala.OfferManagementBackend.Entities.PercentOfferEntity;
 import com.mypathshala.OfferManagementBackend.Repositories.CouponRepo;
+import com.mypathshala.OfferManagementBackend.Repositories.DisplayedOfferRepo;
 import com.mypathshala.OfferManagementBackend.Repositories.FlatOfferRepo;
 import com.mypathshala.OfferManagementBackend.Repositories.OfferRepo;
 import com.mypathshala.OfferManagementBackend.Repositories.PercentOfferRepo;
 import com.mypathshala.OfferManagementBackend.Util.MappingUtil;
 import com.mypathshala.OfferManagementBackend.models.OfferModel;
+import com.mypathshala.OfferManagementBackend.models.OfferStatsModel;
 
 @Service
 public class OfferService {
@@ -31,6 +33,9 @@ public class OfferService {
 	
 	@Autowired
 	CouponRepo couponRepo;
+	
+	@Autowired
+	DisplayedOfferRepo displayedOfferRepo;
 	
 	@Autowired
 	MappingUtil mappingUtil;
@@ -130,6 +135,21 @@ public class OfferService {
 		}
 		
 	}
+	
+
+	public OfferStatsModel getViewsClicksUses(OfferModel offerModel) {
+		
+		OfferStatsModel osm=new OfferStatsModel();
+		
+		osm.setGetRequests(displayedOfferRepo.numOfGetRequests(offerModel.getOfferId()));
+		osm.setViews(displayedOfferRepo.numOfViews(offerModel.getOfferId()));
+		osm.setClicks(displayedOfferRepo.numOfClicks(offerModel.getOfferId()));
+		osm.setUses(displayedOfferRepo.numOfUses(offerModel.getOfferId()));
+		
+		return osm;
+	
+	}
+	
 	
 	private ModelMapper setEntityToModelMappings() {
 		
