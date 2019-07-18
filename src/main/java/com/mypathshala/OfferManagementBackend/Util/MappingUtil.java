@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mypathshala.OfferManagementBackend.Entities.CouponEntity;
@@ -14,12 +15,16 @@ import com.mypathshala.OfferManagementBackend.Entities.OfferEntity;
 import com.mypathshala.OfferManagementBackend.Entities.PercentOfferEntity;
 import com.mypathshala.OfferManagementBackend.Entities.PlacementEntity;
 import com.mypathshala.OfferManagementBackend.Entities.Placement_BestOffer_Entity;
+import com.mypathshala.OfferManagementBackend.Repositories.PlacementRepo;
 import com.mypathshala.OfferManagementBackend.models.BestOfferRequestModel;
 import com.mypathshala.OfferManagementBackend.models.OfferModel;
+import com.mypathshala.OfferManagementBackend.models.PlacementDetails;
 
 @Service
 public class MappingUtil {
 	
+	@Autowired
+	PlacementRepo placementRepo;
 	
 	private void modelToOfferEntity(OfferModel offerModel, ModelMapper modelMapper){
 		
@@ -278,21 +283,12 @@ public class MappingUtil {
 	public Placement_BestOffer_Entity borModelToPlBoEntity( OfferEntity offerEntity, 
 															BestOfferRequestModel borModel) {
 		
-		PropertyMap<BestOfferRequestModel, Placement_BestOffer_Entity> conversionMap=new PropertyMap<BestOfferRequestModel, Placement_BestOffer_Entity>() {
-			
-			protected void configure() {
-				map().getPlacementEntity().setSiteId(source.getPlacementDetails().getSiteId());
-				map().getPlacementEntity().setPageId(source.getPlacementDetails().getPageId());
-				map().getPlacementEntity().setPlaceId(source.getPlacementDetails().getPlaceId());
-			}
-			
-		};
+		Placement_BestOffer_Entity result=new Placement_BestOffer_Entity();
 		
-		ModelMapper modelMapper=new ModelMapper();
-		
-		modelMapper.addMappings(conversionMap);
-		
-		Placement_BestOffer_Entity result=modelMapper.map(borModel, Placement_BestOffer_Entity.class);
+		result.addPlacementEntity(placementRepo.findBySiteIdAndPageIdAndPlaceId(borModel.getPlacementDetails().getSiteId(),
+																				borModel.getPlacementDetails().getPageId(),
+																				borModel.getPlacementDetails().getPlaceId())
+																				);
 		
 		result.setOfferEntity(offerEntity);
 		
@@ -311,6 +307,28 @@ public class MappingUtil {
 		doe.setRequestType("get");
 		
 		return doe;
+	}
+
+
+	public PlacementEntity placementDetailsToEntity(PlacementDetails placementDetails) {
+		
+		PropertyMap<PlacementDetails, PlacementEntity> conversionMap=new PropertyMap<PlacementDetails, PlacementEntity>() {
+			
+			@Override
+			protected void configure() {
+				map().setSiteId(source.getSiteId());
+				map().setPageId(source.getPageId());
+				map().setPlaceId(source.getPlaceId());
+				map().setDismissDuration(source.getDismissDuration());
+			}
+			
+		};
+		
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.addMappings(conversionMap);
+		
+		
+		return modelMapper.map(placementDetails, PlacementEntity.class);
 	}
 
 	

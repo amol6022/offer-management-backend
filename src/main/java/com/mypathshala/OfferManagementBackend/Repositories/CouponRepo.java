@@ -27,4 +27,6 @@ public interface CouponRepo extends CrudRepository<CouponEntity,Integer>{
 											@Param("value") String value
 											);
 
+	Iterable<CouponEntity> findByCreator(String creator);
+
 }

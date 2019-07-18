@@ -1,6 +1,6 @@
 package com.mypathshala.OfferManagementBackend.models;
 
-public class DismissedOfferRequestModel {
+public class GeneralRequestModel {
 	
 	private PlacementDetails placementDetails;
 	

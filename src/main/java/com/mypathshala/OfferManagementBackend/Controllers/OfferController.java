@@ -29,22 +29,22 @@ public class OfferController {
 	}
 	
 	
-	@RequestMapping("/offers/{creator}/{offerType}")
-	public List<OfferModel> getOffersByOfferType(@PathVariable("offerType") String offerType, @PathVariable("creator") String creator){
-		return offerService.getOffersByOfferType(offerType,creator);
-	}
-
-	
-	@RequestMapping("/offers/{creator}/{displayType}")
-	public List<OfferModel> getOffersByDisplayType(@PathVariable("displayType") String displayType, @PathVariable("creator") String creator){
-		return offerService.getOffersByDisplayType(displayType,creator);
-	}
-	
-	
-	@RequestMapping("/offers/{creator}/{status}")
-	public List<OfferModel> getOffersByStatus(@PathVariable("status") String status, @PathVariable("creator") String creator){
-		return offerService.getOffersByStatus(status,creator);
-	}
+//	@RequestMapping("/offers/{creator}/{offerType}")
+//	public List<OfferModel> getOffersByOfferType(@PathVariable("offerType") String offerType, @PathVariable("creator") String creator){
+//		return offerService.getOffersByOfferType(offerType,creator);
+//	}
+//
+//	
+//	@RequestMapping("/offers/{creator}/{displayType}")
+//	public List<OfferModel> getOffersByDisplayType(@PathVariable("displayType") String displayType, @PathVariable("creator") String creator){
+//		return offerService.getOffersByDisplayType(displayType,creator);
+//	}
+//	
+//	
+//	@RequestMapping("/offers/{creator}/{status}")
+//	public List<OfferModel> getOffersByStatus(@PathVariable("status") String status, @PathVariable("creator") String creator){
+//		return offerService.getOffersByStatus(status,creator);
+//	}
 	
 	
 	@RequestMapping(method=RequestMethod.POST, value="/offers")
@@ -60,6 +60,11 @@ public class OfferController {
 	@RequestMapping(method=RequestMethod.DELETE, value="/offers")
 	public void deleteOffer(@RequestBody OfferModel offerModel) {
 		offerService.deleteOffer(offerModel);
+	}
+	
+	@RequestMapping("/offers/{id}/stats")
+	public void getViewsClicksUses() {
+		
 	}
 	
 }

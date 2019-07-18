@@ -62,42 +62,34 @@ public class OfferService {
 		return list;
 	
 	}
-	
-	
-	private ModelMapper setEntityToModelMappings() {
-		
-		ModelMapper modelMapper=new ModelMapper();
-		
-		modelMapper.addMappings(mappingUtil.flatEntityToModel());
-		modelMapper.addMappings(mappingUtil.percentEntityToModel());
-		modelMapper.addMappings(mappingUtil.couponEntityToModel());
-		
-		return modelMapper;
-	}
 
 
 	public List<OfferModel> getOffersByCreator(String creator){
-		return null;
-	}
+		
+		Iterable<FlatOfferEntity> foe=flatOfferRepo.findByCreator(creator);
 
-	
-	public List<OfferModel> getOffersByOfferType(String offerType, String creator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Iterable<PercentOfferEntity> poe=percentOfferRepo.findByCreator(creator);
+		
+		Iterable<CouponEntity> ce=couponRepo.findByCreator(creator);
+		
+		List<OfferModel> list=new ArrayList<>();
+		
+		ModelMapper modelMapper=setEntityToModelMappings();
+				
+		for(FlatOfferEntity tempFoe:foe) {
+			list.add(modelMapper.map(tempFoe, OfferModel.class));
+		}
+		
+		for(PercentOfferEntity tempPoe:poe) {
+			list.add(modelMapper.map(tempPoe, OfferModel.class));
+		}
+		
+		for(CouponEntity tempCe:ce) {
+			list.add(modelMapper.map(tempCe, OfferModel.class));
+		}
 
-	
-	public List<OfferModel> getOffersByDisplayType(String useType, String creator) {
-		// TODO Auto-generated method stub
-		return null;
+		return list;
 	}
-
-	
-	public List<OfferModel> getOffersByStatus(String status, String creator) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 	public void createUpdateOffer(OfferModel offerModel) {
 		
@@ -137,6 +129,17 @@ public class OfferService {
 			
 		}
 		
+	}
+	
+	private ModelMapper setEntityToModelMappings() {
+		
+		ModelMapper modelMapper=new ModelMapper();
+		
+		modelMapper.addMappings(mappingUtil.flatEntityToModel());
+		modelMapper.addMappings(mappingUtil.percentEntityToModel());
+		modelMapper.addMappings(mappingUtil.couponEntityToModel());
+		
+		return modelMapper;
 	}
 
 		

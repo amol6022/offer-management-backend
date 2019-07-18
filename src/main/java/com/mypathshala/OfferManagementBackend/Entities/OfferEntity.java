@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="offer_table")
@@ -184,11 +186,13 @@ public class OfferEntity {
         }
         this.criteriaEntity = null;
 	}
-
+	
+	@JsonIgnore
 	public DismissedOfferEntity getDismissedOfferEntity() {
 		return dismissedOfferEntity;
 	}
-
+	
+	@JsonIgnore
 	public void setDismissedOfferEntity(DismissedOfferEntity dismissedOfferEntity) {
 		this.dismissedOfferEntity = dismissedOfferEntity;
 	}
@@ -200,5 +204,6 @@ public class OfferEntity {
 	public void setPlacement_BestOffer_Entity(Placement_BestOffer_Entity placement_BestOffer_Entity) {
 		this.placement_BestOffer_Entity = placement_BestOffer_Entity;
 	}
+	
 	
 }

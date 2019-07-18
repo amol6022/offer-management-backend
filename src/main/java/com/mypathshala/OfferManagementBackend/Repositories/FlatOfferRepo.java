@@ -21,16 +21,15 @@ public interface FlatOfferRepo extends CrudRepository<FlatOfferEntity,Integer> {
 			+ "foe.offerEntity.placementEntity.placeId= :placeId and "
 			+ "foe.offerEntity.criteriaEntity.parameter= :parameter and "
 			+ "foe.offerEntity.criteriaEntity.value= :value"
-//			+ "foe.offerEntity.dismissOfferEntity.userId= :borm.userId and "
-//			+ "(foe.offerEntity.placementEntity.dismissDuration)*(1000*24*60*60)<= :currTime - foe.offerEntity.dismissedOfferEntity.timestamp"
 			)
-//	@Query(value="Select foe from FlatOfferEntity foe where foe.offerEntity.placementEntity.siteId= :siteId")
 	List<FlatOfferEntity> findRelevantOffers(@Param("siteId") String siteId,
 											@Param("pageId") String pageId,
 											@Param("placeId")String placeId,
 											@Param("parameter")String parameter,
 											@Param("value") String value
 											);
+
+	Iterable<FlatOfferEntity> findByCreator(String creator);
 
 
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mypathshala.OfferManagementBackend.Services.CustomerSideOfferService;
 import com.mypathshala.OfferManagementBackend.models.BestOfferRequestModel;
-import com.mypathshala.OfferManagementBackend.models.DismissedOfferRequestModel;
+import com.mypathshala.OfferManagementBackend.models.GeneralRequestModel;
 
 @RestController
 public class CustomerSideOfferController {
@@ -21,23 +21,23 @@ public class CustomerSideOfferController {
 	}
 	
 	@RequestMapping("/offerViewed")
-	public void onOfferViewed() {
-		
+	public void onOfferViewed(@RequestBody GeneralRequestModel grm) {
+		csoService.onOfferViewed(grm);
 	}
 	
 	@RequestMapping("/offerClicked")
-	public void onOfferClicked() {
-		
+	public void onOfferClicked(@RequestBody GeneralRequestModel grm) {
+		csoService.onOfferClicked(grm);
 	}
 	
 	@RequestMapping("/offerUsed")
-	public void onOfferUsed() {
-		
+	public void onOfferUsed(@RequestBody GeneralRequestModel grm) {
+		csoService.onOfferUsed(grm);
 	}
 	
 	@RequestMapping("/offerDismissed")
-	public boolean onOfferDismissed(DismissedOfferRequestModel dorm) {
-		return csoService.onOfferDismissed(dorm);
+	public void onOfferDismissed(@RequestBody GeneralRequestModel grm) {
+		csoService.onOfferDismissed(grm);
 	}
 	
 }

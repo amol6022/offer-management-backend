@@ -1,6 +1,5 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,7 @@ public class DismissedOfferEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int dismissedOfferId;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "offer_id")
 	private OfferEntity offerEntity;
 	
@@ -49,5 +48,19 @@ public class DismissedOfferEntity {
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	public OfferEntity getOfferEntity() {
+		return offerEntity;
+	}
+
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity = offerEntity;
+	}
+	
+	public void addOfferEntity(OfferEntity offerEntity) {
+		offerEntity.setDismissedOfferEntity(this);
+		this.offerEntity=offerEntity;
+	}
 		
+	
 }

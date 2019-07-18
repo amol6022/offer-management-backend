@@ -6,7 +6,7 @@ public class PlacementDetails {
 	private String siteId;
 	private String pageId;
 	private String placeId;
-	
+	private int dismissDuration;			//in days
 	
 	public PlacementDetails() {
 		
@@ -44,6 +44,14 @@ public class PlacementDetails {
 	}
 	public void setPlaceId(String placeId) {
 		this.placeId = placeId;
+	}
+
+	public int getDismissDuration() {
+		return dismissDuration;
+	}
+
+	public void setDismissDuration(int dismissDuration) {
+		this.dismissDuration = dismissDuration;
 	}
 	
 	

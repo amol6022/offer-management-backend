@@ -29,6 +29,8 @@ public interface PercentOfferRepo extends CrudRepository<PercentOfferEntity,Inte
 												@Param("value") String value
 												);
 
+	Iterable<PercentOfferEntity> findByCreator(String creator);
+
 
 
 }
