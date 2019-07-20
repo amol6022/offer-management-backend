@@ -53,7 +53,7 @@ public class CustomerSideOfferService {
 	
 	
 	public String getBestOffer(BestOfferRequestModel borModel) {
-		
+				
 		List<FlatOfferEntity> flatOffersList=flatOfferRepo.findRelevantOffers(	
 				borModel.getPlacementDetails().getSiteId(), 
 				borModel.getPlacementDetails().getPageId(),
@@ -80,12 +80,10 @@ public class CustomerSideOfferService {
 		
 		OfferEntity oe=optimalOffer(flatOffersList,percentOffersList,couponsList,borModel.getUserId());
 		
-		recordRequest(borModel, storeBestOffer(oe,borModel));
-		
-		if(oe==null)
+		if(oe==null) {
 			return "no offers!";
-		
-		else {
+		}else {
+			storeBestOfferAndRecordRequest(oe,borModel);
 			return oe.getDisplayContent();
 		}
 	}
@@ -95,7 +93,8 @@ public class CustomerSideOfferService {
 		
 		Placement_BestOffer_Entity plBoEntity=placementBestOfferRepo.findByPlacement(grm.getPlacementDetails().getSiteId(),
 																					 grm.getPlacementDetails().getPageId(),
-																					 grm.getPlacementDetails().getPlaceId());
+																					 grm.getPlacementDetails().getPlaceId(),
+																					 grm.getUserId());
 			
 		DismissedOfferEntity doe=new DismissedOfferEntity();
 		
@@ -146,7 +145,7 @@ public class CustomerSideOfferService {
 		PercentOfferEntity poe=bestPercentOffer(percentOffersList, coursePrice,doeList,userId);
 		CouponEntity ce=bestCoupon(couponsList, coursePrice,doeList,userId);
 				
-		
+				
 		if(foe==null && poe==null && ce==null) {return null;}
 		
 		
@@ -175,22 +174,26 @@ public class CustomerSideOfferService {
 		}
 		
 	}
+
 	
-	
-	private void recordRequest(BestOfferRequestModel borModel, Placement_BestOffer_Entity plBoEntity) {
+	private void storeBestOfferAndRecordRequest(OfferEntity offerEntity, BestOfferRequestModel borModel) {
 		
-		DisplayedOfferEntity displayedOfferEntity=mappingUtil.borModelToDisplayedOffer(borModel,plBoEntity);
+		Placement_BestOffer_Entity plBoEntity=placementBestOfferRepo.findByPlacement(borModel.getPlacementDetails().getSiteId(),
+														  borModel.getPlacementDetails().getPageId(),
+														  borModel.getPlacementDetails().getPlaceId(),
+														  borModel.getUserId());
+		
+		if(plBoEntity==null) {
+			plBoEntity=placementBestOfferRepo.save(mappingUtil.borModelToPlBoEntity(offerEntity, borModel));
+		}else {
+			plBoEntity.setOfferEntity(offerEntity);
+			plBoEntity=placementBestOfferRepo.save(plBoEntity);
+		}
+		
+		DisplayedOfferEntity displayedOfferEntity=mappingUtil.borModelToDisplayedOffer(borModel,plBoEntity.getOfferEntity());
 		
 		displayedOfferRepo.save(displayedOfferEntity);
 		
-	}
-
-	
-	private Placement_BestOffer_Entity storeBestOffer(OfferEntity offerEntity, BestOfferRequestModel borModel) {
-		
-		Placement_BestOffer_Entity plBoEntity=mappingUtil.borModelToPlBoEntity(offerEntity, borModel);
-		
-		return placementBestOfferRepo.save(plBoEntity);
 	}
 
 
@@ -204,19 +207,31 @@ public class CustomerSideOfferService {
 		//TODO add check for number of times coupon already used.
 		
 		for (CouponEntity ce : couponsList) {
-			for(DismissedOfferEntity doe:doeList) {
+			
+			if(coursePrice>=ce.getMinCartValue() && ce.getCouponDiscount()>max) {
 				
-				long dismissDuration=ce.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
-				long currTime=new Date().getTime();
-				long timestamp=doe.getTimestamp();
+				boolean flag=true;
 				
-				if(!doe.getUserId().equals(userId) || (doe.getUserId().equals(userId) && dismissDuration<=currTime-timestamp)) {
-					if(coursePrice>=ce.getMinCartValue() && ce.getCouponDiscount()>max) {
-						max=ce.getCouponDiscount();
-						result=ce;
+				for(DismissedOfferEntity doe:doeList) {
+					
+					long dismissDuration=ce.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
+					long currTime=new Date().getTime();
+					long timestamp=doe.getTimestamp();
+					
+					if(doe.getUserId().equals(userId) &&  dismissDuration>currTime-timestamp) {
+						flag=false;
+						break;
 					}
+					
 				}
+				
+				if(flag) {
+					max=ce.getCouponDiscount();
+					result=ce;
+				}
+				
 			}
+			
 		}
 		
 		return result;
@@ -231,28 +246,36 @@ public class CustomerSideOfferService {
 		PercentOfferEntity result=null;
 		
 		for (PercentOfferEntity poe : percentOffersList) {
+		
+			double currOfferDiscount=poe.getPercentDiscount()*(0.01)*coursePrice;
 			
-			for(DismissedOfferEntity doe:doeList) {
+			if(coursePrice>=poe.getMinCartValue() && currOfferDiscount>max 
+				&& currOfferDiscount<=poe.getMaxDiscount()) {
 				
-				long dismissDuration=poe.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
-				long currTime=new Date().getTime();
-				long timestamp=doe.getTimestamp();
+				boolean flag=true;
 				
-				if(!doe.getUserId().equals(userId) || (doe.getUserId().equals(userId) && dismissDuration<=currTime-timestamp)) {
-			
-					double currOfferDiscount=poe.getPercentDiscount()*(0.01)*coursePrice;
+				for(DismissedOfferEntity doe:doeList) {
 					
-					if(coursePrice>=poe.getMinCartValue() && currOfferDiscount>max 
-						&& currOfferDiscount<=poe.getMaxDiscount()) {
-						
-						max=currOfferDiscount;
-						result=poe;
+					long dismissDuration=poe.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
+					long currTime=new Date().getTime();
+					long timestamp=doe.getTimestamp();
 					
+					if(doe.getUserId().equals(userId) &&  dismissDuration>currTime-timestamp) {
+						flag=false;
+						break;
 					}
+					
 				}
-			}
+				
+				if(flag) {
+					max=currOfferDiscount;
+					result=poe;
+				}
 			
+			}
 		}
+			
+		
 		
 		
 		return result;
@@ -267,20 +290,26 @@ public class CustomerSideOfferService {
 		
 		for (FlatOfferEntity foe : flatOffersList) {
 			
-			for(DismissedOfferEntity doe:doeList) {
+			if(coursePrice>=foe.getMinCartValue() && foe.getDiscountAmount()>max) {
+				boolean flag=true;
 				
-				long dismissDuration=foe.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
-				long currTime=new Date().getTime();
-				long timestamp=doe.getTimestamp();
-				
-				if(!doe.getUserId().equals(userId) || (doe.getUserId().equals(userId) && dismissDuration<=currTime-timestamp)) {
-			
-					if(coursePrice>=foe.getMinCartValue() && foe.getDiscountAmount()>max) {
-						max=foe.getDiscountAmount();
-						result=foe;
+				for(DismissedOfferEntity doe:doeList) {
+					
+					long dismissDuration=foe.getOfferEntity().getPlacementEntity().getDismissDuration()*(1000*24*60*60);
+					long currTime=new Date().getTime();
+					long timestamp=doe.getTimestamp();
+					
+					if(doe.getUserId().equals(userId) &&  dismissDuration>currTime-timestamp) {
+						flag=false;
+						break;
 					}
+					
 				}
 				
+				if(flag) {
+					max=foe.getDiscountAmount();
+					result=foe;
+				}
 			}
 			
 		}
@@ -293,11 +322,12 @@ public class CustomerSideOfferService {
 		
 		Placement_BestOffer_Entity plBoEntity=placementBestOfferRepo.findByPlacement(grm.getPlacementDetails().getSiteId(),
 																					 grm.getPlacementDetails().getPageId(),
-																					 grm.getPlacementDetails().getPlaceId());
+																					 grm.getPlacementDetails().getPlaceId(),
+																					 grm.getUserId());
 
 		DisplayedOfferEntity doe=new DisplayedOfferEntity();
 		
-		doe.setPlBoEntity(plBoEntity);
+		doe.setOfferEntity(plBoEntity.getOfferEntity());
 		doe.setRequestType(requestType);
 		doe.setTimestamp(new Date().getTime());
 		doe.setUserId(grm.getUserId());

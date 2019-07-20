@@ -289,7 +289,7 @@ public class MappingUtil {
 																				borModel.getPlacementDetails().getPageId(),
 																				borModel.getPlacementDetails().getPlaceId())
 																				);
-		
+		result.setUserId(borModel.getUserId());
 		result.setOfferEntity(offerEntity);
 		
 		return result;
@@ -298,13 +298,15 @@ public class MappingUtil {
 
 
 	public DisplayedOfferEntity borModelToDisplayedOffer(BestOfferRequestModel borModel,
-														 Placement_BestOffer_Entity plBoEntity) {
+														 OfferEntity offerEntity) {
+		
 		DisplayedOfferEntity doe=new DisplayedOfferEntity();
 		
-		doe.setPlBoEntity(plBoEntity);
+		doe.setOfferEntity(offerEntity);
 		doe.setUserId(borModel.getUserId());
 		doe.setTimestamp(new Date().getTime());
 		doe.setRequestType("get");
+		doe.setUserId(borModel.getUserId());
 		
 		return doe;
 	}

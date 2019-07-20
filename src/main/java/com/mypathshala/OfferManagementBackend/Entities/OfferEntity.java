@@ -58,6 +58,9 @@ public class OfferEntity {
     
     @OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
     private DismissedOfferEntity dismissedOfferEntity;
+   
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+    private DisplayedOfferEntity displayedOfferEntity;
 
 	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
 			String displayContent, String status, int useCount, PlacementEntity placementEntity,
@@ -204,6 +207,16 @@ public class OfferEntity {
 	public void setPlacement_BestOffer_Entity(Placement_BestOffer_Entity placement_BestOffer_Entity) {
 		this.placement_BestOffer_Entity = placement_BestOffer_Entity;
 	}
+
+	public DisplayedOfferEntity getDisplayedOfferEntity() {
+		return displayedOfferEntity;
+	}
+
+	public void setDisplayedOfferEntity(DisplayedOfferEntity displayedOfferEntity) {
+		this.displayedOfferEntity = displayedOfferEntity;
+	}
+	
+	
 	
 	
 }

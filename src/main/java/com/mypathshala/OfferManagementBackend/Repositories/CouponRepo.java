@@ -27,6 +27,8 @@ public interface CouponRepo extends CrudRepository<CouponEntity,Integer>{
 											@Param("value") String value
 											);
 
+	@Query("Select ce from CouponEntity ce where"
+		 + " ce.offerEntity.creator= :creator")
 	Iterable<CouponEntity> findByCreator(String creator);
 
 }

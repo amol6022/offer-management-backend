@@ -22,29 +22,20 @@ public class Placement_BestOffer_Entity {
 	@OneToOne(fetch = FetchType.EAGER)
 	private OfferEntity offerEntity;
 	
-	@OneToOne(mappedBy = "plBoEntity")
-	private DisplayedOfferEntity displayedOfferEntity;
-
-	
+	private String userId;
 	
 	public Placement_BestOffer_Entity() {
 
 	}
 
 	public Placement_BestOffer_Entity(int placementBestOfferId, PlacementEntity placementEntity,
-			OfferEntity offerEntity, DisplayedOfferEntity displayedOfferEntity) {
+									  OfferEntity offerEntity, String userId) {
+		
 		this.placementBestOfferId = placementBestOfferId;
 		this.placementEntity = placementEntity;
 		this.offerEntity = offerEntity;
-		this.displayedOfferEntity = displayedOfferEntity;
-	}
-
-	public DisplayedOfferEntity getDisplayedOfferEntity() {
-		return displayedOfferEntity;
-	}
-
-	public void setDisplayedOfferEntity(DisplayedOfferEntity displayedOfferEntity) {
-		this.displayedOfferEntity = displayedOfferEntity;
+		this.userId = userId;
+		
 	}
 
 	public int getPlacementBestOfferId() {
@@ -79,6 +70,14 @@ public class Placement_BestOffer_Entity {
 			placementEntity.setPlacement_BestOffer_Entity(null);
         }
         this.placementEntity = null;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 

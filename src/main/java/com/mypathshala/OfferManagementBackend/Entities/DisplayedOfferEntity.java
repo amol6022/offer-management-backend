@@ -18,8 +18,8 @@ public class DisplayedOfferEntity {								//stores information of those offers 
 	private int displayedOfferId;
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="placement_bestoffer_id")
-	private Placement_BestOffer_Entity plBoEntity;
+	@JoinColumn(name="offer_id")
+	private OfferEntity offerEntity;
 	
 	private String userId;
 	
@@ -27,10 +27,10 @@ public class DisplayedOfferEntity {								//stores information of those offers 
 	
 	private String requestType;
 
-	public DisplayedOfferEntity(int displayedOfferId, Placement_BestOffer_Entity plBoEntity,
+	public DisplayedOfferEntity(int displayedOfferId, OfferEntity offerEntity,
 								String userId, long timestamp, String requestType) {
 		this.displayedOfferId = displayedOfferId;
-		this.plBoEntity = plBoEntity;
+		this.offerEntity = offerEntity;
 		this.userId = userId;
 		this.timestamp = timestamp;
 		this.requestType = requestType;
@@ -48,12 +48,12 @@ public class DisplayedOfferEntity {								//stores information of those offers 
 		this.displayedOfferId = displayedOfferId;
 	}
 
-	public Placement_BestOffer_Entity getPlBoEntity() {
-		return plBoEntity;
+	public OfferEntity getOfferEntity() {
+		return offerEntity;
 	}
 
-	public void setPlBoEntity(Placement_BestOffer_Entity plBoEntity) {
-		this.plBoEntity = plBoEntity;
+	public void setOfferEntity(OfferEntity offerEntity) {
+		this.offerEntity = offerEntity;
 	}
 
 	public String getUserId() {
@@ -80,18 +80,18 @@ public class DisplayedOfferEntity {								//stores information of those offers 
 		this.requestType = requestType;
 	}
 	
-	public void addPlBoEntity(Placement_BestOffer_Entity plBoEntity) {
-		this.plBoEntity=plBoEntity;
-		plBoEntity.setDisplayedOfferEntity(this);
+	public void addPlBoEntity(OfferEntity offerEntity) {
+		this.offerEntity=offerEntity;
+		offerEntity.setDisplayedOfferEntity(this);
 	}
 	
-	public void removePlBoEntity(Placement_BestOffer_Entity plBoEntity) {
+	public void removePlBoEntity(OfferEntity offerEntity) {
 		
-		if(plBoEntity!=null) {
-			plBoEntity.setDisplayedOfferEntity(null);
+		if(offerEntity!=null) {
+			offerEntity.setDisplayedOfferEntity(null);
 		}
 		
-		this.plBoEntity=null;
+		this.offerEntity=null;
 	}
 	
 }

@@ -28,7 +28,9 @@ public interface PercentOfferRepo extends CrudRepository<PercentOfferEntity,Inte
 												@Param("parameter")String parameter,
 												@Param("value") String value
 												);
-
+	
+	@Query("Select poe from PercentOfferEntity poe where"
+		 + " poe.offerEntity.creator= :creator")
 	Iterable<PercentOfferEntity> findByCreator(String creator);
 
 

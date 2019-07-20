@@ -28,8 +28,10 @@ public interface FlatOfferRepo extends CrudRepository<FlatOfferEntity,Integer> {
 											@Param("parameter")String parameter,
 											@Param("value") String value
 											);
-
-	Iterable<FlatOfferEntity> findByCreator(String creator);
+	
+	@Query("Select foe from FlatOfferEntity foe where"
+		 + " foe.offerEntity.creator= :creator")
+	Iterable<FlatOfferEntity> findByCreator(@Param("creator") String creator);
 
 
 }

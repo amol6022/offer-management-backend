@@ -14,10 +14,12 @@ public interface Placement_BestOffer_Repo extends CrudRepository<Placement_BestO
 	@Query(value = "Select pboe from Placement_BestOffer_Entity pboe where "
 			+ "pboe.placementEntity.siteId = :siteId and "
 			+ "pboe.placementEntity.pageId = :pageId and "
-			+ "pboe.placementEntity.placeId= :placeId")
+			+ "pboe.placementEntity.placeId= :placeId and "
+			+ "pboe.userId= :userId")
 	Placement_BestOffer_Entity findByPlacement( @Param("siteId") String siteId,
 												@Param("pageId") String pageId,
-												@Param("placeId") String placeId);
+												@Param("placeId") String placeId,
+												@Param("userId") String userId);
 
 	Placement_BestOffer_Entity findByPlacementEntity(PlacementEntity placementEntity);
 }

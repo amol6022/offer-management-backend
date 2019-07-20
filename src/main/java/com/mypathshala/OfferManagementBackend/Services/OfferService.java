@@ -141,10 +141,10 @@ public class OfferService {
 		
 		OfferStatsModel osm=new OfferStatsModel();
 		
-		osm.setGetRequests(displayedOfferRepo.numOfGetRequests(offerModel.getOfferId()));
-		osm.setViews(displayedOfferRepo.numOfViews(offerModel.getOfferId()));
-		osm.setClicks(displayedOfferRepo.numOfClicks(offerModel.getOfferId()));
-		osm.setUses(displayedOfferRepo.numOfUses(offerModel.getOfferId()));
+		osm.setGetRequests(displayedOfferRepo.numOfGetRequests(offerModel.getOfferDetails().getOfferId()));
+		osm.setViews(displayedOfferRepo.numOfViews(offerModel.getOfferDetails().getOfferId()));
+		osm.setClicks(displayedOfferRepo.numOfClicks(offerModel.getOfferDetails().getOfferId()));
+		osm.setUses(displayedOfferRepo.numOfUses(offerModel.getOfferDetails().getOfferId()));
 		
 		return osm;
 	
