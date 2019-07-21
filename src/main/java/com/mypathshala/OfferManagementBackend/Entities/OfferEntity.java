@@ -1,5 +1,6 @@
 package com.mypathshala.OfferManagementBackend.Entities;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -42,13 +45,22 @@ public class OfferEntity {
 	@OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
 	private CouponEntity couponEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(mappedBy = "offerEntity")
+	private Placement_BestOffer_Entity placement_BestOffer_Entity;
+
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "placement_id")
 	private PlacementEntity placementEntity;
 	
-    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "criteria_id")
-	private CriteriaEntity criteriaEntity;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name="criteria_id")
+    private CriteriaEntity criteriaEntity;
+    
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+    private DismissedOfferEntity dismissedOfferEntity;
+   
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="offerEntity")
+    private DisplayedOfferEntity displayedOfferEntity;
 
 	public OfferEntity(int offerId, String offerType, String useType, String creator, String displayType,
 			String displayContent, String status, int useCount, PlacementEntity placementEntity,
@@ -177,5 +189,34 @@ public class OfferEntity {
         }
         this.criteriaEntity = null;
 	}
+	
+	@JsonIgnore
+	public DismissedOfferEntity getDismissedOfferEntity() {
+		return dismissedOfferEntity;
+	}
+	
+	@JsonIgnore
+	public void setDismissedOfferEntity(DismissedOfferEntity dismissedOfferEntity) {
+		this.dismissedOfferEntity = dismissedOfferEntity;
+	}
+	
+    public Placement_BestOffer_Entity getPlacement_BestOffer_Entity() {
+		return placement_BestOffer_Entity;
+	}
+
+	public void setPlacement_BestOffer_Entity(Placement_BestOffer_Entity placement_BestOffer_Entity) {
+		this.placement_BestOffer_Entity = placement_BestOffer_Entity;
+	}
+
+	public DisplayedOfferEntity getDisplayedOfferEntity() {
+		return displayedOfferEntity;
+	}
+
+	public void setDisplayedOfferEntity(DisplayedOfferEntity displayedOfferEntity) {
+		this.displayedOfferEntity = displayedOfferEntity;
+	}
+	
+	
+	
 	
 }

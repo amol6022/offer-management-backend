@@ -10,34 +10,31 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="criteria_table")
-public class CriteriaEntity {
+public class CriteriaEntity{
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int criteriaId;
 	
-	private int userAge;
+	private String parameter;
 	
-	private String region;
+	private String value;
 	
-	private int numOfPurchases;
-	
-	@OneToOne(fetch=FetchType.EAGER, mappedBy="criteriaEntity")
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "criteriaEntity")
 	private OfferEntity offerEntity;
 
-	public CriteriaEntity(int criteriaId, int userAge, String region, int numOfPurchases) {
-
-		this.criteriaId = criteriaId;
-		this.userAge = userAge;
-		this.region = region;
-		this.numOfPurchases = numOfPurchases;
-	
-	}
-
-	
 	public CriteriaEntity() {
 
 	}
+
+	public CriteriaEntity(int criteriaId, String parameter, String value, OfferEntity offerEntity) {
+		super();
+		this.criteriaId = criteriaId;
+		this.parameter = parameter;
+		this.value = value;
+		this.offerEntity = offerEntity;
+	}
+
 
 	public int getCriteriaId() {
 		return criteriaId;
@@ -47,32 +44,28 @@ public class CriteriaEntity {
 		this.criteriaId = criteriaId;
 	}
 
-	public int getUserAge() {
-		return userAge;
+	public String getParameter() {
+		return parameter;
 	}
 
-	public void setUserAge(int userAge) {
-		this.userAge = userAge;
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
 	}
 
-	public String getRegion() {
-		return region;
+	public String getValue() {
+		return value;
 	}
 
-	public void setRegion(String region) {
-		this.region = region;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
-	public int getNumOfPurchases() {
-		return numOfPurchases;
+	public OfferEntity getOfferEntity() {
+		return offerEntity;
 	}
 
-	public void setNumOfPurchases(int numOfPurchases) {
-		this.numOfPurchases = numOfPurchases;
-	}
-	
 	public void setOfferEntity(OfferEntity offerEntity) {
-		this.offerEntity=offerEntity;
+		this.offerEntity = offerEntity;
 	}
 
 }
