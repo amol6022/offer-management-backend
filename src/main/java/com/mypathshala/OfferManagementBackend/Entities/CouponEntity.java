@@ -1,4 +1,4 @@
- package com.mypathshala.OfferManagementBackend.Entities;
+package com.mypathshala.OfferManagementBackend.Entities;
 
 import java.util.List;
 
@@ -13,34 +13,51 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="flat_offer_table")
-public class FlatOfferEntity{
+@Table(name="coupon_table")
+public class CouponEntity {
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int flatOfferId;
-    
-	private int discountAmount;
-    
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int couponId;
+	
+	private int couponDiscount;
+	
 	private int minCartValue;
-    
-    @OneToOne(cascade=CascadeType.ALL)
+	
+	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "offer_id")
     private OfferEntity offerEntity;
-    
+	
+
+	public CouponEntity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public CouponEntity(int couponId, int couponDiscount, int minCartValue, OfferEntity offerEntity) {
+		super();
+		this.couponId = couponId;
+		this.couponDiscount = couponDiscount;
+		this.minCartValue = minCartValue;
+		this.offerEntity = offerEntity;
+	}
+	public int getCouponId() {
+		return couponId;
+	}
+	public void setCouponId(int couponId) {
+		this.couponId = couponId;
+	}
+	public int getCouponDiscount() {
+		return couponDiscount;
+	}
+	public void setCouponDiscount(int couponDiscount) {
+		this.couponDiscount = couponDiscount;
+	}
 	public OfferEntity getOfferEntity() {
 		return offerEntity;
 	}
 	public void setOfferEntity(OfferEntity offerEntity) {
 		this.offerEntity = offerEntity;
-	}
-	public int getFlatOfferId() {
-		return flatOfferId;
-	}
-	public void setFlatOfferId(int flatOfferId) {
-		this.flatOfferId = flatOfferId;
 	}
 	public int getMinCartValue() {
 		return minCartValue;
@@ -48,20 +65,14 @@ public class FlatOfferEntity{
 	public void setMinCartValue(int minCartValue) {
 		this.minCartValue = minCartValue;
 	}
-	
-	public int getDiscountAmount() {
-		return discountAmount;
-	}
-	public void setDiscountAmount(int discountAmount) {
-		this.discountAmount = discountAmount;
-	}
 	public void addOfferEntity(OfferEntity offerEntity) {
 		this.offerEntity=offerEntity;
-		offerEntity.setFlatOfferEntity(this);
+		offerEntity.setCouponEntity(this);
 	}
+	
 	public void removeOfferEntity(OfferEntity offerEntity) {
 		if (offerEntity != null) {
-            offerEntity.setFlatOfferEntity(null);
+            offerEntity.setCouponEntity(null);
         }
         this.offerEntity = null;
 	}
