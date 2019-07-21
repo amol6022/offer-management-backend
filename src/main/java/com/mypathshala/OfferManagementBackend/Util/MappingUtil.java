@@ -96,7 +96,6 @@ public class MappingUtil {
 			@Override
 			protected void configure() {
 				map().setCouponId(source.getOfferId());
-//				map().setOfferEntity(modelToOfferEntity(offerModel));
 				modelToOfferEntity(offerModel,modelMapper);
 				map().setCouponDiscount(source.getOfferDetails().getCouponDiscount());
 				map().setMinCartValue(source.getOfferDetails().getMinCartValue());
